@@ -1,6 +1,6 @@
 # CmTomlMode
 
-A better TOML mode for Codemirror. The current mode offered by codemirror lacks
+A better TOML mode for Codemirror. The current mode offered by codemirror v5 lacks
 support for some features of TOML version 0.4 such as datetimes and inline
 tables but also fails to correctly colour some of the more basic types.
 
@@ -46,4 +46,27 @@ of simply copying
 
 You can see this mode in action [here](https://sgarciac.github.io/cm-toml-mode/)
 
+### Usage with Codemirror 6
 
+This mode can also be used with [Codemirror 6](https://codemirror.net/6/) ("The next 
+generation of the CodeMirror in-browser editor"). It's just a matter of using the
+`@codemirror/stream-parser` package, as is detailed here: https://github.com/codemirror/legacy-modes
+
+Here is a complete example:
+
+```js
+import {StreamLanguage} from "@codemirror/stream-parser"
+import {tomlMode} from "@sgarciac/cm_toml_mode";
+
+import {EditorView, EditorState, basicSetup} from "@codemirror/basic-setup"
+
+let view = new EditorView({
+  state: EditorState.create({
+    extensions: [basicSetup, StreamLanguage.define(tomlMode())]
+  })
+})
+```
+
+Note that, unlike the legacy modes available in the `@codemirror/legacy-modes` package,
+here it's necessary to call the `tomlMode` function to obtain an object with the 
+shape expected by `StreamLanguage.define` (an object with the `startState` and `token` methods).
